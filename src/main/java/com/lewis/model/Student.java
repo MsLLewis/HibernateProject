@@ -2,8 +2,17 @@ package com.lewis.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
+/**
+ * Entity Student Class defines a student and is the owner
+ * of a M:1 association with School and a 1:M associatoin
+ * with Assignments
+ */
+@NamedQueries({
+        @NamedQuery(name="updateStudentById", query = "UPDATE Student set lastName = :name WHERE  id = :id"),
+})
 @Entity
 @Table(name= "students")
 public class Student {
@@ -16,6 +25,14 @@ public class Student {
     private String email;
     private String major;
 
+    @ManyToOne
+    @JoinColumn(name = "school_id")
+    private School school;
+
+    @OneToMany(targetEntity = Assignment.class, cascade = {CascadeType.ALL})
+    private List<Assignment> assignments;
+
+    //Empty constructor
     public Student(){
         this.fristName = "";
         this.lastName = "";
@@ -23,11 +40,21 @@ public class Student {
         this.major = "";
     }
 
+    //Constructor with params
     public Student(String fristName, String lastName, String email, String major) {
         this.fristName = fristName;
         this.lastName = lastName;
         this.email = email;
         this.major = major;
+    }
+
+    //Constructor with params and school association
+    public Student(String fristName, String lastName, String email, String major, School school) {
+        this.fristName = fristName;
+        this.lastName = lastName;
+        this.email = email;
+        this.major = major;
+        this.school = school;
     }
 
     public int getId() {
@@ -68,6 +95,22 @@ public class Student {
 
     public void setMajor(String major) {
         this.major = major;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     @Override

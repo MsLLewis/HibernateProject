@@ -1,4 +1,4 @@
-package com.lewis.services;
+package com.lewis.service;
 
 import com.lewis.model.Student;
 import org.hibernate.Session;

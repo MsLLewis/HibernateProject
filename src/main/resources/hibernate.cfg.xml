@@ -21,6 +21,8 @@
 
         <!--   Mapping entity file -->
         <mapping class="com.lewis.model.Student"/>
+        <mapping class="com.lewis.model.School"/>
+        <mapping class="com.lewis.model.Assignment"/>
 
     </session-factory>
 </hibernate-configuration>
