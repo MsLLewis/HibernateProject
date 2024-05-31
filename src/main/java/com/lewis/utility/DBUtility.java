@@ -1,15 +1,12 @@
 package com.lewis.utility;
 
-import com.lewis.model.Assignment;
-import com.lewis.model.School;
-import com.lewis.model.Student;
+import com.lewis.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 /**
  * DBUtility class provides database connectivity
@@ -21,6 +18,102 @@ public class DBUtility {
         SessionFactory factory = new Configuration().configure().buildSessionFactory();
         return factory.openSession();
     }
+
+    public void enterCourseData(){
+        Session session = connectToDB();
+        Transaction t = session.beginTransaction();
+
+        //----Create Course/class Entity set one----
+        Course course1 = new Course("Java Development");
+        Course course2 = new Course("Mathematics");
+        Course course3 = new Course("Physics");
+
+        //------  Store Course/ Class  --------
+        session.persist(course1);
+        session.persist(course2);
+        session.persist(course3);
+
+        //-----Create a Set of Courses /Class one --------
+        Set<Course> courseSet1 = new HashSet<Course>();
+        courseSet1.add(course1);
+        courseSet1.add(course2);
+        courseSet1.add(course3);
+
+        //-----Create a Set of Courses /Class two --------
+        Set<Course> courseSet2 = new HashSet<Course>();
+        courseSet2.add(course2);
+        courseSet2.add(course3);
+        courseSet2.add(course1);
+
+        //-----Create a Set of Courses /Class three --------
+        Set<Course> courseSet3 = new HashSet<Course>();
+        courseSet3.add(course3);
+        courseSet3.add(course1);
+        courseSet3.add(course2);
+
+        //Create Student instances
+        Student s1 = new Student("Jane", "Doe","jdoe@gmail.com","Physics", courseSet1);
+        Student s2 = new Student("Kathy", "Hampton","khampton@gmail.com","Computer Science", courseSet2);
+        Student s3 = new Student("Alvin", "Earl","aearl@gmail.com","Accounting", courseSet3);
+
+        //persist data
+        session.persist(s1);
+        session.persist(s2);
+        session.persist(s3);
+        t.commit();
+
+    }
+
+    public void enterStudent(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter first name: ");
+        String fname = input.nextLine();
+        System.out.println("Enter last name: ");
+        String lname = input.nextLine();
+        System.out.println("Enter email: ");
+        String email = input.nextLine();
+        System.out.println("Enter major: ");
+        String major = input.nextLine();
+        System.out.println("Enter bio: ");
+        String bio = input.nextLine();
+        System.out.println("Enter school name: ");
+        String school = input.nextLine();
+        insertStudentWithProfile(fname,lname,email,major, bio,school );
+
+    }
+
+    public void insertStudentWithProfile(String fname, String lname, String email, String major, String bio, String school_name){
+        Session session = connectToDB();
+        Transaction transaction = session.beginTransaction();
+
+        //Create a new StudentProfile
+        StudentProfile profile = new StudentProfile();
+        profile.setBio(bio);
+        session.persist(profile);
+
+        //Create new School
+        School school = new School();
+        school.setName(school_name);
+        session.persist(school);
+
+        //Create a new Student
+        Student student = new Student();
+        student.setFristName(fname);
+        student.setLastName(lname);
+        student.setEmail(email);
+        student.setMajor(major);
+        student.setStudentProfile(profile); //Student profile associated with Student class -- onetoone relationship
+        student.setSchool(school);
+
+
+        //persisting student to database
+        session.persist(student);
+
+        transaction.commit();
+
+
+    }
+
 
     /**
      * Inserts data into the School and Student tables.

@@ -2,8 +2,10 @@ package com.lewis.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Entity Student Class defines a student and is the owner
@@ -32,6 +34,19 @@ public class Student {
     @OneToMany(targetEntity = Assignment.class, cascade = {CascadeType.ALL})
     private List<Assignment> assignments;
 
+    @OneToOne
+    @JoinColumn(name = "student_profile_id")//foreign key column name in Student table
+    private StudentProfile studentProfile;
+
+    @ManyToMany
+    @JoinTable(
+            name = "student_course",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
+
+
     //Empty constructor
     public Student(){
         this.fristName = "";
@@ -55,6 +70,14 @@ public class Student {
         this.email = email;
         this.major = major;
         this.school = school;
+    }
+
+    public Student(String fristName, String lastName, String email, String major, Set<Course> courses) {
+        this.fristName = fristName;
+        this.lastName = lastName;
+        this.email = email;
+        this.major = major;
+        this.courses = courses;
     }
 
     public int getId() {
@@ -113,6 +136,22 @@ public class Student {
         this.assignments = assignments;
     }
 
+    public StudentProfile getStudentProfile() {
+        return studentProfile;
+    }
+
+    public void setStudentProfile(StudentProfile studentProfile) {
+        this.studentProfile = studentProfile;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public boolean equals(Object obj) {
         boolean isValid = true;
@@ -137,6 +176,7 @@ public class Student {
         return Objects.hash(getId(), getFristName(), getLastName(), getEmail(), getMajor());
     }
 
+
     @Override
     public String toString() {
         return "Student{" +
@@ -145,8 +185,10 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", major='" + major + '\'' +
+                ", school=" + school +
+                ", assignments=" + assignments +
+                ", studentProfile=" + studentProfile +
+                ", courses=" + courses +
                 '}';
     }
-
-
 }

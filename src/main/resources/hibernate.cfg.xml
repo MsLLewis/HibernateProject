@@ -23,6 +23,8 @@
         <mapping class="com.lewis.model.Student"/>
         <mapping class="com.lewis.model.School"/>
         <mapping class="com.lewis.model.Assignment"/>
+        <mapping class="com.lewis.model.StudentProfile"/>
+        <mapping class="com.lewis.model.Course"/>
 
     </session-factory>
 </hibernate-configuration>
