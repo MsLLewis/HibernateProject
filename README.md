@@ -1,1 +1,1 @@
-# HibernateProject
+# HibernateProject with Junit Testing 
