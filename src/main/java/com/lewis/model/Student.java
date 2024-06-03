@@ -55,6 +55,11 @@ public class Student {
         this.major = "";
     }
 
+    public Student(int id, String major){
+        this.id = id;
+        this.major = major;
+    }
+
     //Constructor with params
     public Student(String fristName, String lastName, String email, String major) {
         this.fristName = fristName;
